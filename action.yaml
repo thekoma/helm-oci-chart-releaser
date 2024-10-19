@@ -20,6 +20,10 @@ inputs:
   path:
     required: false
     description: Chart path (Default 'charts/{name}')
+  push:
+    required: false
+    default: 'true'
+    description: Actually push the helm
   registry:
     required: true
     description: OCI registry
@@ -60,6 +64,7 @@ runs:
         HELM_EXPERIMENTAL_OCI: '1'
 
     - name: Helm | Push
+      if: inputs.push == 'true'
       shell: bash
       run: helm push '${{ inputs.name }}-${{ inputs.tag }}.tgz' 'oci://${{ inputs.registry }}/${{ inputs.repository }}'
       env:
